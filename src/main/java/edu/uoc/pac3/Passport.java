@@ -5,16 +5,16 @@ import java.time.Period;
 
 public class Passport {
     public static final String PASSPORT_NUMBER_ERROR = "Passport number cannot be null or empty.";
-    public static final String ISSUE_DATE_ERROR = "Passport number cannot be null or empty.";
-    public static final String EXPIRATION_DATE_ERROR = "Passport number cannot be null or empty.";
-    public static final String VISA_TYPE_ERROR = "Passport number cannot be null or empty.";
+    public static final String ISSUE_DATE_ERROR = "Issue date cannot be null or before the current date.";
+    public static final String EXPIRATION_DATE_ERROR = "Expiration date cannot be null or before the issue date, and must be within 10 years of the issue date.";
+    public static final String VISA_TYPE_ERROR = "Visa type must be a correct value.";
 
     private String passportNumber;
     private LocalDate issueDate;
     private LocalDate expirationDate;
-    private int visaType;
+    private VisaType visaType;
 
-    public Passport(String passportNumber, LocalDate issueDate, LocalDate expirationDate, int visaType) {
+    public Passport(String passportNumber, LocalDate issueDate, LocalDate expirationDate, VisaType visaType) {
         setPassportNumber(passportNumber);
         setIssueDate(issueDate);
         setExpirationDate(expirationDate);
@@ -22,7 +22,6 @@ public class Passport {
     }
 
     // methods
-
     public String getPassportNumber() {
         return passportNumber;
     }
@@ -45,9 +44,6 @@ public class Passport {
         }
 
         LocalDate now = LocalDate.now();
-        // int anys = avui.getYear() - tina.getYear();
-        // es podria calcular aixi també però he utilitzat Perdio que ho calcula automàticament,
-        // en el cas que fossin dies entre anys seria molt més fàcil utilitzantl-ho.
 
         Period periode = Period.between(issueDate, now);
         int anys = periode.getYears();
@@ -65,9 +61,7 @@ public class Passport {
         if (expirationDate == null) {
             throw new IllegalArgumentException(EXPIRATION_DATE_ERROR);
         }
-        // int anys = avui.getYear() - tina.getYear();
-        // es podria calcular aixi també però he utilitzat Perdio que ho calcula automàticament,
-        // en el cas que fossin dies entre anys seria molt més fàcil utilitzantl-ho.
+
         Period period = Period.between(issueDate, expirationDate);
         int anys = period.getYears();
 
@@ -78,12 +72,12 @@ public class Passport {
         this.expirationDate = expirationDate;
     }
 
-    public int getVisaType() {
+    public VisaType getVisaType() {
         return visaType;
     }
 
-    private void setVisaType(int visaType) throws IllegalArgumentException {
-        if (visaType < 0) {
+    private void setVisaType(VisaType visaType) throws IllegalArgumentException {
+        if (visaType == null) {
             throw new IllegalArgumentException(VISA_TYPE_ERROR);
         }
 

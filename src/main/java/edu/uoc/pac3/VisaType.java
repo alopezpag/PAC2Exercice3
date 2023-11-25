@@ -40,8 +40,17 @@ public enum VisaType {
         return intIdentifier;
     }
 
-    @Override
-    public String toString() {
-        return this.name() + " | " + this.description + " | '" + this.stringIdentifier + "' | " + this.intIdentifier;
+    public static VisaType getVisaTypeByStringIdentifier(String id) {
+        for (VisaType visaType : VisaType.values()) {
+            if (visaType.getStringIdentifier().equals(id)) {
+                return visaType;
+            }
+        }
+        return null;
+    }
+
+    public VisaType next() {
+        VisaType[] values = VisaType.values();
+        return values[(this.ordinal() + 1) % values.length];
     }
 }
